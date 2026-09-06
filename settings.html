@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Pengaturan AI Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+
+        body {
+            background: #0b1419;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 820px;
+            background: #0e1a22;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* HEADER */
+        .header {
+            background: #1f2c33;
+            padding: 12px 16px 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #2b3b43;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            color: #aebac1;
+            font-size: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .back-btn:hover {
+            color: #e9edef;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00a884, #25d366);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 0 0 2px #1f2c33, 0 0 0 4px #2b3b43;
+        }
+
+        .chat-info {
+            color: #e9edef;
+            line-height: 1.3;
+        }
+        .chat-info .name {
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.3px;
+        }
+        .chat-info .status {
+            font-size: 12px;
+            color: #8696a0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-info .status i {
+            font-size: 10px;
+            color: #53bdeb;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 18px;
+            color: #aebac1;
+            font-size: 18px;
+        }
+        .header-right i {
+            cursor: default;
+        }
+
+        /* SETTINGS AREA */
+        .settings-area {
+            flex: 1;
+            padding: 20px 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .settings-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .settings-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .settings-area::-webkit-scrollbar-thumb {
+            background: #3b4b53;
+            border-radius: 10px;
+        }
+
+        .settings-section {
+            background: #1f2c33;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #2b3b43;
+        }
+
+        .settings-section .section-title {
+            color: #e9edef;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .settings-section .section-title i {
+            color: #00a884;
+            font-size: 16px;
+        }
+
+        .settings-section .section-desc {
+            color: #8696a0;
+            font-size: 12px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aebac1;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: #2b3b43;
+            border: 1px solid #3b4b53;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #e9edef;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #00a884;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #8696a0;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .form-group .input-hint {
+            color: #8696a0;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        /* Toggle Show/Hide API Key */
+        .api-key-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .api-key-wrapper input {
+            flex: 1;
+            padding-right: 44px;
+        }
+
+        .toggle-visibility {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #8696a0;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        .toggle-visibility:hover {
+            color: #e9edef;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: #005c4b;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #006d59;
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-secondary {
+            background: #2b3b43;
+            color: #aebac1;
+        }
+        .btn-secondary:hover {
+            background: #3b4b53;
+        }
+        .btn-secondary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-success {
+            background: #00a884;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #00b892;
+        }
+        .btn-success:active {
+            transform: scale(0.97);
+        }
+
+        .btn-danger {
+            background: #8b2c2c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #a03333;
+        }
+        .btn-danger:active {
+            transform: scale(0.97);
+        }
+
+        /* Status message */
+        .status-msg {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: none;
+            margin-top: 8px;
+        }
+        .status-msg.success {
+            display: block;
+            background: #0a3d35;
+            color: #25d366;
+            border: 1px solid #1a5a4a;
+        }
+        .status-msg.error {
+            display: block;
+            background: #3d1a1a;
+            color: #f87171;
+            border: 1px solid #5a2a2a;
+        }
+        .status-msg.info {
+            display: block;
+            background: #1a2a3d;
+            color: #60a5fa;
+            border: 1px solid #2a4a5a;
+        }
+
+        /* Footer */
+        .settings-footer {
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid #2b3b43;
+            text-align: center;
+            color: #8696a0;
+            font-size: 11px;
+        }
+        .settings-footer a {
+            color: #00a884;
+            text-decoration: none;
+        }
+        .settings-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 430px) {
+            .phone-frame {
+                border-radius: 0;
+                max-height: 100vh;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="avatar">
+                <i class="fas fa-cog" style="font-size: 18px;"></i>
+            </div>
+            <div class="chat-info">
+                <div class="name">Pengaturan AI</div>
+                <div class="status">
+                    <i class="fas fa-circle" style="color: #25d366; font-size: 8px;"></i> Konfigurasi
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <i class="fas fa-save" id="saveIcon" style="cursor: pointer;" title="Simpan Pengaturan"></i>
+        </div>
+    </div>
+
+    <!-- SETTINGS AREA -->
+    <div class="settings-area" id="settingsArea">
+
+        <!-- Status Message -->
+        <div class="status-msg" id="statusMsg"></div>
+
+        <!-- API Key Section -->
+        <div class="settings-section">
+            <div class="section-title">
+                <i class="fas fa-key"></i> API Key
+            </div>
+            <div class="section-desc">
+                Masukkan API Key dari Google AI Studio. Dapatkan di 
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #00a884;">Google AI Studio</a>
+            </div>
+
+            <div class="form-group">
+                <label>Google Gemini API Key</label>
+                <div class="api-key-wrapper">
+                    <input type="password" id="apiKeyInput" placeholder="Masukkan API Key..." />
+                    <button class="toggle-visibility" id="toggleVisibility" title="Tampilkan/Sembunyikan">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="input-hint">Contoh: AIzaSyD-9t6F4t7K5s8J3n2M1p0QwErTyUiOpAsDfGhJk</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="saveApiKeyBtn">
+                    <i class="fas fa-save"></i> Simpan API Key
+                </button>
+                <button class="btn btn-danger" id="clearApiKeyBtn">
+                    <i class="fas fa-trash"></i> Hapus
+                </button>
+            </div>
+        </div>
+
+        <!-- System Prompt Section -->
+        <div class="settings-section">
+            <div class="section-title">
+                <i class="fas fa-comment-dots"></i> System Prompt
+            </div>
+            <div class="section-desc">
+                Atur instruksi awal untuk AI. Prompt ini akan mempengaruhi semua percakapan.
+            </div>
+
+            <div class="form-group">
+                <label>System Prompt (Opsional)</label>
+                <textarea id="systemPromptInput" placeholder="Contoh: Kamu adalah asisten AI yang ramah dan membantu..."></textarea>
+                <div class="input-hint">Biarkan kosong untuk menggunakan prompt default.</div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="savePromptBtn">
+                    <i class="fas fa-save"></i> Simpan Prompt
+                </button>
+                <button class="btn btn-secondary" id="resetPromptBtn">
+                    <i class="fas fa-undo"></i> Reset Default
+                </button>
+            </div>
+        </div>
+
+        <!-- Current Settings Info -->
+        <div class="settings-section" style="background: #0e1a22; border-color: #1f2c33;">
+            <div class="section-title" style="color: #8696a0; font-size: 12px;">
+                <i class="fas fa-info-circle"></i> Status Saat Ini
+            </div>
+            <div style="color: #8696a0; font-size: 12px; line-height: 1.8;">
+                <div><strong>API Key:</strong> <span id="apiKeyStatus">Belum disimpan</span></div>
+                <div><strong>System Prompt:</strong> <span id="promptStatus">Default</span></div>
+            </div>
+        </div>
+
+        <!-- Export/Import -->
+        <div class="settings-section">
+            <div class="section-title">
+                <i class="fas fa-file-export"></i> Backup & Restore
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="exportSettingsBtn">
+                    <i class="fas fa-download"></i> Ekspor
+                </button>
+                <button class="btn btn-secondary" id="importSettingsBtn">
+                    <i class="fas fa-upload"></i> Impor
+                </button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;" />
+            </div>
+        </div>
+
+        <div class="settings-footer">
+            Data disimpan di localStorage browser Anda.
+            <br />Dibuat oleh DWI JOKO PURWANTO
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ========== STORAGE KEYS ==========
+        const STORAGE_KEY_API = 'joko_ai_api_key';
+        const STORAGE_KEY_PROMPT = 'joko_ai_system_prompt';
+
+        // ========== ELEMENTS ==========
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const systemPromptInput = document.getElementById('systemPromptInput');
+        const toggleVisibilityBtn = document.getElementById('toggleVisibility');
+        const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+        const clearApiKeyBtn = document.getElementById('clearApiKeyBtn');
+        const savePromptBtn = document.getElementById('savePromptBtn');
+        const resetPromptBtn = document.getElementById('resetPromptBtn');
+        const exportSettingsBtn = document.getElementById('exportSettingsBtn');
+        const importSettingsBtn = document.getElementById('importSettingsBtn');
+        const importFileInput = document.getElementById('importFileInput');
+        const saveIcon = document.getElementById('saveIcon');
+        const statusMsg = document.getElementById('statusMsg');
+        const apiKeyStatus = document.getElementById('apiKeyStatus');
+        const promptStatus = document.getElementById('promptStatus');
+
+        // ========== DEFAULT PROMPT ==========
+        const DEFAULT_PROMPT = 'Kamu adalah asisten AI yang ramah, membantu, dan informatif. Jawab dengan bahasa Indonesia yang sopan dan jelas.';
+
+        // ========== HELPER FUNCTIONS ==========
+        function showStatus(message, type = 'info') {
+            statusMsg.textContent = message;
+            statusMsg.className = 'status-msg ' + type;
+            // Auto hide after 4 seconds for success/error
+            if (type === 'success' || type === 'error') {
+                clearTimeout(window.statusTimeout);
+                window.statusTimeout = setTimeout(() => {
+                    statusMsg.className = 'status-msg';
+                }, 4000);
+            }
+        }
+
+        function loadSettings() {
+            // Load API Key
+            const savedApiKey = localStorage.getItem(STORAGE_KEY_API);
+            if (savedApiKey) {
+                apiKeyInput.value = savedApiKey;
+                apiKeyStatus.textContent = '✅ Tersimpan (' + savedApiKey.substring(0, 8) + '...)';
+                apiKeyStatus.style.color = '#25d366';
+            } else {
+                apiKeyInput.value = '';
+                apiKeyStatus.textContent = '❌ Belum disimpan';
+                apiKeyStatus.style.color = '#f87171';
+            }
+
+            // Load System Prompt
+            const savedPrompt = localStorage.getItem(STORAGE_KEY_PROMPT);
+            if (savedPrompt) {
+                systemPromptInput.value = savedPrompt;
+                promptStatus.textContent = savedPrompt.substring(0, 40) + (savedPrompt.length > 40 ? '...' : '');
+                promptStatus.style.color = '#60a5fa';
+            } else {
+                systemPromptInput.value = '';
+                promptStatus.textContent = 'Default (tidak disimpan)';
+                promptStatus.style.color = '#8696a0';
+            }
+        }
+
+        function updateApiKeyStatus() {
+            const saved = localStorage.getItem(STORAGE_KEY_API);
+            if (saved) {
+                apiKeyStatus.textContent = '✅ Tersimpan (' + saved.substring(0, 8) + '...)';
+                apiKeyStatus.style.color = '#25d366';
+            } else {
+                apiKeyStatus.textContent = '❌ Belum disimpan';
+                apiKeyStatus.style.color = '#f87171';
+            }
+        }
+
+        function updatePromptStatus() {
+            const saved = localStorage.getItem(STORAGE_KEY_PROMPT);
+            if (saved) {
+                promptStatus.textContent = saved.substring(0, 40) + (saved.length > 40 ? '...' : '');
+                promptStatus.style.color = '#60a5fa';
+            } else {
+                promptStatus.textContent = 'Default (tidak disimpan)';
+                promptStatus.style.color = '#8696a0';
+            }
+        }
+
+        // ========== EVENT HANDLERS ==========
+
+        // Toggle visibility API Key
+        toggleVisibilityBtn.addEventListener('click', function() {
+            const isPassword = apiKeyInput.type === 'password';
+            apiKeyInput.type = isPassword ? 'text' : 'password';
+            this.querySelector('i').className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+        });
+
+        // Save API Key
+        saveApiKeyBtn.addEventListener('click', function() {
+            const key = apiKeyInput.value.trim();
+            if (!key) {
+                showStatus('❌ Masukkan API Key terlebih dahulu!', 'error');
+                return;
+            }
+            if (!key.startsWith('AIza')) {
+                showStatus('⚠️ API Key Google biasanya diawali dengan "AIza". Periksa kembali!', 'error');
+                return;
+            }
+            localStorage.setItem(STORAGE_KEY_API, key);
+            updateApiKeyStatus();
+            showStatus('✅ API Key berhasil disimpan!', 'success');
+        });
+
+        // Clear API Key
+        clearApiKeyBtn.addEventListener('click', function() {
+            if (confirm('Hapus API Key yang tersimpan?')) {
+                localStorage.removeItem(STORAGE_KEY_API);
+                apiKeyInput.value = '';
+                updateApiKeyStatus();
+                showStatus('🗑️ API Key telah dihapus', 'info');
+            }
+        });
+
+        // Save System Prompt
+        savePromptBtn.addEventListener('click', function() {
+            const prompt = systemPromptInput.value.trim();
+            if (!prompt) {
+                showStatus('⚠️ Prompt kosong, gunakan Reset Default atau isi prompt', 'error');
+                return;
+            }
+            localStorage.setItem(STORAGE_KEY_PROMPT, prompt);
+            updatePromptStatus();
+            showStatus('✅ System Prompt berhasil disimpan!', 'success');
+        });
+
+        // Reset System Prompt ke default
+        resetPromptBtn.addEventListener('click', function() {
+            if (confirm('Reset ke prompt default?')) {
+                localStorage.removeItem(STORAGE_KEY_PROMPT);
+                systemPromptInput.value = '';
+                updatePromptStatus();
+                showStatus('🔄 Prompt direset ke default', 'info');
+            }
+        });
+
+        // Save via header icon
+        saveIcon.addEventListener('click', function() {
+            // Save both if filled
+            const key = apiKeyInput.value.trim();
+            const prompt = systemPromptInput.value.trim();
+
+            let saved = 0;
+            if (key) {
+                localStorage.setItem(STORAGE_KEY_API, key);
+                saved++;
+            }
+            if (prompt) {
+                localStorage.setItem(STORAGE_KEY_PROMPT, prompt);
+                saved++;
+            }
+
+            updateApiKeyStatus();
+            updatePromptStatus();
+
+            if (saved > 0) {
+                showStatus(`✅ ${saved} pengaturan berhasil disimpan!`, 'success');
+            } else {
+                showStatus('⚠️ Tidak ada data yang disimpan', 'error');
+            }
+        });
+
+        // Export Settings
+        exportSettingsBtn.addEventListener('click', function() {
+            const data = {
+                apiKey: localStorage.getItem(STORAGE_KEY_API) || '',
+                systemPrompt: localStorage.getItem(STORAGE_KEY_PROMPT) || '',
+                exportedAt: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai_settings_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showStatus('📤 Pengaturan berhasil diekspor!', 'success');
+        });
+
+        // Import Settings - trigger file input
+        importSettingsBtn.addEventListener('click', function() {
+            importFileInput.click();
+        });
+
+        importFileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    let imported = 0;
+
+                    if (data.apiKey) {
+                        localStorage.setItem(STORAGE_KEY_API, data.apiKey);
+                        apiKeyInput.value = data.apiKey;
+                        imported++;
+                    }
+                    if (data.systemPrompt) {
+                        localStorage.setItem(STORAGE_KEY_PROMPT, data.systemPrompt);
+                        systemPromptInput.value = data.systemPrompt;
+                        imported++;
+                    }
+
+                    updateApiKeyStatus();
+                    updatePromptStatus();
+
+                    if (imported > 0) {
+                        showStatus(`📥 Berhasil import ${imported} pengaturan!`, 'success');
+                    } else {
+                        showStatus('⚠️ Tidak ada data yang diimport', 'error');
+                    }
+                } catch (err) {
+                    showStatus('❌ File tidak valid: ' + err.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+            importFileInput.value = ''; // Reset input
+        });
+
+        // ========== KEYBOARD SHORTCUT ==========
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveIcon.click();
+            }
+        });
+
+        // ========== INIT ==========
+        loadSettings();
+
+        // Auto-save when leaving page? No, user must explicitly save.
+
+        console.log('🛠️ Halaman Pengaturan AI siap digunakan.');
+        console.log('💡 Gunakan Ctrl+S untuk menyimpan semua pengaturan.');
+    })();
+</script>
+
+</body>
+</html>
